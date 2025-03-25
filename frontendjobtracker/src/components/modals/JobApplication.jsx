@@ -21,10 +21,11 @@ const JobApplication = ({ isOpen, onClose, job, applyForJob }) => {
   useEffect(() => {
     setApplicationForm({
       ...applicationForm,
-      name: userData?.name,
-      email: userData?.email,
-      skills: userData?.skills?.map((item) => ({ value: item, label: item })),
+      name: userData?.name || "",
+      email: userData?.email || "",
+      skills: userData?.skills?.map((item) => ({ value: item, label: item })) || [],
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +35,7 @@ const JobApplication = ({ isOpen, onClose, job, applyForJob }) => {
     const updatedForm = {
       ...applicationForm,
       jobId: job?.id,
-      qualification: applicationForm.qualification?.value,
+      qualification: applicationForm.qualification?.value || "",
       skills: applicationForm.skills.map((item) => item.value),
       status: "Pending",
     };
@@ -46,13 +47,16 @@ const JobApplication = ({ isOpen, onClose, job, applyForJob }) => {
 
     setApplicationForm({
       position: "",
-      name: userData?.name,
+      name: userData?.name || "",
       qualification: "",
-      skills: userData?.skills?.map((item) => ({ value: item, label: item })),
-      email: userData?.email,
+      skills: userData?.skills?.map((item) => ({ value: item, label: item })) || [],
+      email: userData?.email || "",
       phone: "",
       resumeLink: "",
     });
+
+    setIsLoading(false);
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -74,7 +78,7 @@ const JobApplication = ({ isOpen, onClose, job, applyForJob }) => {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {job?.skills.map((item, idx) => (
+            {(job?.skills ?? []).map((item, idx) => (
               <span
                 key={idx}
                 className="mr-2 py-1 px-2 bg-slate-400 text-xs border rounded-md"
@@ -99,7 +103,7 @@ const JobApplication = ({ isOpen, onClose, job, applyForJob }) => {
               value={applicationForm.name}
               readOnly={true}
               className="w-full py-1 px-4 rounded-lg text-black font-semibold bg-white/25"
-              required={true}
+              required
             />
           </div>
 
@@ -110,7 +114,7 @@ const JobApplication = ({ isOpen, onClose, job, applyForJob }) => {
               value={applicationForm.email}
               readOnly={true}
               className="w-full py-1 px-4 rounded-lg text-black font-semibold bg-white/25"
-              required={true}
+              required
             />
           </div>
 
@@ -127,7 +131,7 @@ const JobApplication = ({ isOpen, onClose, job, applyForJob }) => {
               }
               placeholder="(e.g. +91 84928 8**2*)"
               className="w-full py-1 px-4 rounded-lg text-black/80"
-              required={true}
+              required
             />
           </div>
 
@@ -171,9 +175,9 @@ const JobApplication = ({ isOpen, onClose, job, applyForJob }) => {
                   resumeLink: e.target.value,
                 })
               }
-              placeholder="(e.g. https://drive.google.com/file/3232va3)"
+              placeholder="(e.g. https://drive.google.com/file/...)"
               className="w-full py-1 px-4 rounded-lg text-black/80"
-              required={true}
+              required
             />
           </div>
 

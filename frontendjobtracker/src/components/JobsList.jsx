@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const JobsList = ({
   actionLoading,
-  jobs,
+  jobs = [], // Default to empty array
   onApply,
   onDelete,
   setSelectedJob,
@@ -46,59 +46,64 @@ const JobsList = ({
       )}
 
       <div className="my-6 flex flex-col gap-6">
-        {jobs.map((job) => (
-          <div
-            key={job.id}
-            className="my-4 p-4 flex justify-between items-center gap-4 border rounded-lg"
-          >
-            <div>
-              <h2 className="text-xl font-semibold">{job.position}</h2>
-              <p className="opacity-80 mb-4">
-                {job.experience} of Experience required
-              </p>
-
-              <h2 className="font-semibold">{job.company}</h2>
-              <p className="opacity-80">{job.location}</p>
-            </div>
-
-            <div className="flex flex-wrap gap-2">
-              {job.skills.map((item, idx) => (
-                <span
-                  key={idx}
-                  className="mr-2 py-1 px-2 bg-slate-700 text-xs border rounded-md"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-
-            {isRecruiter && userData.jobIds.includes(job.id) ? (
+        {Array.isArray(jobs) && jobs.length > 0 ? (
+          jobs.map((job) => (
+            <div
+              key={job.id}
+              className="my-4 p-4 flex justify-between items-center gap-4 border rounded-lg"
+            >
               <div>
-                <button
-                  onClick={() => handleDeleteClick(job)}
-                  disabled={actionLoading}
-                  className={`py-4 px-8 bg-red-600 hover:opacity-70 rounded-lg text-white text-lg font-semibold transition-opacity ${
-                    actionLoading && "opacity-30 hover:opacity-40"
-                  }`}
-                >
-                  Delete
-                </button>
+                <h2 className="text-xl font-semibold">{job.position}</h2>
+                <p className="opacity-80 mb-4">
+                  {job.experience} of Experience required
+                </p>
+
+                <h2 className="font-semibold">{job.company}</h2>
+                <p className="opacity-80">{job.location}</p>
               </div>
-            ) : (
-              <div>
-                <button
-                  onClick={() => handleApplyClick(job)}
-                  disabled={isRecruiter}
-                  className={`py-4 px-8 bg-green-600 hover:opacity-70 rounded-lg text-white text-lg font-semibold transition-opacity ${
-                    isRecruiter && "opacity-30 hover:opacity-40"
-                  }`}
-                >
-                  Apply
-                </button>
+
+              <div className="flex flex-wrap gap-2">
+                {Array.isArray(job.skills) &&
+                  job.skills.map((item, idx) => (
+                    <span
+                      key={idx}
+                      className="mr-2 py-1 px-2 bg-slate-700 text-xs border rounded-md"
+                    >
+                      {item}
+                    </span>
+                  ))}
               </div>
-            )}
-          </div>
-        ))}
+
+              {isRecruiter && userData?.jobIds?.includes(job.id) ? (
+                <div>
+                  <button
+                    onClick={() => handleDeleteClick(job)}
+                    disabled={actionLoading}
+                    className={`py-4 px-8 bg-red-600 hover:opacity-70 rounded-lg text-white text-lg font-semibold transition-opacity ${
+                      actionLoading && "opacity-30 hover:opacity-40"
+                    }`}
+                  >
+                    Delete
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <button
+                    onClick={() => handleApplyClick(job)}
+                    disabled={isRecruiter}
+                    className={`py-4 px-8 bg-green-600 hover:opacity-70 rounded-lg text-white text-lg font-semibold transition-opacity ${
+                      isRecruiter && "opacity-30 hover:opacity-40"
+                    }`}
+                  >
+                    Apply
+                  </button>
+                </div>
+              )}
+            </div>
+          ))
+        ) : (
+          <p className="text-white text-lg mt-4">No jobs available.</p>
+        )}
       </div>
     </div>
   );
