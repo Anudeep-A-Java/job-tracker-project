@@ -1,4 +1,4 @@
-package com.krish.jobquestbackend;
+package com.anudeep.jobquestbackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
